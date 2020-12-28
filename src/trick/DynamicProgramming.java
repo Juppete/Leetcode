@@ -1,8 +1,13 @@
 package trick;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.PrimitiveIterator.OfDouble;
+
+import sun.java2d.marlin.DPathConsumer2D;
 
 public class DynamicProgramming {
 	/***************EXAMPLE 1: Fibonacci Sequence***********************/
@@ -82,14 +87,75 @@ public class DynamicProgramming {
 		return now;
 	}
 	/*******************************************************************/
-
+	/*******************************************************************/
 	/***************EXAMPLE 2: coins***********************/
+	
+	public int coinChange(int[] coins, int amount) {
+		return coinDP(coins,amount);
+	}
+	
+	public int coinDP(int[] coins,int expectedMount) {
+		if (expectedMount==0) {
+			return 0;
+		}
+		if (expectedMount<0) {
+			return -1;
+		}
+		int numberOfCoins=500; //Enough big
+		for (int coin:coins) {
+			int subProblem=coinDP(coins,expectedMount-coin);
+			if (subProblem==-1) {
+				continue;
+			}
+			numberOfCoins=Math.min(numberOfCoins, 1+subProblem);//add a coin
+		}	
+		return numberOfCoins;
+	}
+	
+	/*----------------------coins with note----------------*/
+	public int coinChange2(int[] coins, int amount) {
+		//Note store the relationship between amount and the number of coins
+		Map<Integer, Integer> note = new HashMap();
+		return coinDPWithNote(note,coins,amount);
+	}
+	
+	public int coinDPWithNote(Map<Integer, Integer> note,int[] coins,int expectedMount) {
+		//If note has expected amount
+		for (Integer key : note.keySet()) {
+			if (key==expectedMount) {
+				return note.get(key);
+			}
+		}
+		
+		if (expectedMount==0) {
+			return 0;
+		}
+		if (expectedMount<0) {
+			return -1;
+		}
+		int numberOfCoins=500; //Enough big
+		for (int coin:coins) {
+			int subProblem=coinDP(coins,expectedMount-coin);
+			if (subProblem==-1) {
+				continue;
+			}
+			numberOfCoins=Math.min(numberOfCoins, 1+subProblem);//add a coin
+		}	
+		note.put(expectedMount, numberOfCoins);
+		return numberOfCoins;
+	}
 	
 	public static void main(String[] args) {
 		DynamicProgramming DP = new DynamicProgramming();
-		System.out.println("output Of fibonacci sequence "+DP.easyFibonacci(10));
-		System.out.println("output Of fibonacci sequence with note "+DP.FibonacciWithNote(10));
-		System.out.println("output Of fibonacci sequence with DP "+DP.FibonacciWithDP(10));
-		System.out.println("output Of fibonacci sequence with DP2 "+DP.FibonacciWithDP2(10));
+//		System.out.println("output Of fibonacci sequence "+DP.easyFibonacci(10));
+//		System.out.println("output Of fibonacci sequence with note "+DP.FibonacciWithNote(10));
+//		System.out.println("output Of fibonacci sequence with DP "+DP.FibonacciWithDP(10));
+//		System.out.println("output Of fibonacci sequence with DP2 "+DP.FibonacciWithDP2(10));
+		
+		/***************EXAMPLE 2: coins***********************/
+		int[] coins= {1,2,5};
+		int amount=11;
+//		System.out.println("output Of coins "+DP.coinChange(coins, amount));
+		System.out.println("output Of coins with note "+DP.coinChange2(coins, amount));
 	}
 }
