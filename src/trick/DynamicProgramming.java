@@ -1,15 +1,19 @@
 package trick;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.PrimitiveIterator.OfDouble;
-
-import sun.java2d.marlin.DPathConsumer2D;
 
 public class DynamicProgramming {
+	//Feature:	find the max or min
+	//			exhaustive search
+	//			optimal sub problem
+	
+	//Note:	store repetitive problem's answer
+	
+	//Process: confirm status -->define DP method --> confirm choose --> 
+	// 		   confirm base case(margin status)
+	
 	/***************EXAMPLE 1: Fibonacci Sequence***********************/
 	//NUMBER: 0  1  2  3  4  5  6  7   8   9   10  11  12   13
 	//OUTPUT: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233
@@ -87,7 +91,9 @@ public class DynamicProgramming {
 		return now;
 	}
 	/*******************************************************************/
-	/*******************************************************************/
+	
+	
+	
 	/***************EXAMPLE 2: coins***********************/
 	
 	public int coinChange(int[] coins, int amount) {
@@ -135,11 +141,14 @@ public class DynamicProgramming {
 		}
 		int numberOfCoins=500; //Enough big
 		for (int coin:coins) {
+			//get subproblem's answer
 			int subProblem=coinDP(coins,expectedMount-coin);
 			if (subProblem==-1) {
 				continue;
 			}
-			numberOfCoins=Math.min(numberOfCoins, 1+subProblem);//add a coin
+			//from small to big
+			//not skip means have answer then add a coin
+			numberOfCoins=Math.min(numberOfCoins, 1+subProblem);
 		}	
 		note.put(expectedMount, numberOfCoins);
 		return numberOfCoins;
@@ -147,6 +156,7 @@ public class DynamicProgramming {
 	
 	public static void main(String[] args) {
 		DynamicProgramming DP = new DynamicProgramming();
+		/***************EXAMPLE 1: fibonacci sequence***********************/
 //		System.out.println("output Of fibonacci sequence "+DP.easyFibonacci(10));
 //		System.out.println("output Of fibonacci sequence with note "+DP.FibonacciWithNote(10));
 //		System.out.println("output Of fibonacci sequence with DP "+DP.FibonacciWithDP(10));
