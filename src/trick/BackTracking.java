@@ -36,6 +36,7 @@ public class BackTracking {
 			}
 			track.add(nums[i]);
 			backTrack(nums, track, output);		
+			//cancel the choice
 			track.removeLast();//Nth number deletes last one and clear path
 		}
 	}
@@ -57,7 +58,7 @@ public class BackTracking {
 	public void backTrack2(int N ,int row,String[][] board ,Vector<String[][]> output) {
 		//Finish condition: N+1th number makes a complete path
 		if (board.length==row) {
-//			output.add(board);//  为什么随着board改变传给output的board也改变？？？？
+			output.add(board);//  为什么随着board改变传给output的board也改变？？？？
 			return;
 		}
 		
